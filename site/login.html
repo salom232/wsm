@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="theme-color" content="#7952b3">
+        <title>Login</title>
+        <link href="css/dataTables.bootstrap5.min.css" rel="stylesheet">
+        <link href="css/jquery-ui.css" rel="stylesheet">
+
+    </head>
+    <body class="bg-light">
+        <div class="row top-buffer">
+            <div class="col-sm-6" id='user'>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            Usuario:
+                        </span>
+                    </div>
+                    <input type="text" class="form-control" id="username">
+                </div>
+            </div>
+        </div>
+        <div class="row top-buffer">
+            <div class="col-sm-6" id='pass'>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                            Password:
+                        </span>
+                    </div>
+                    <input type="password" class="form-control" id="password">
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="col-sm-1">
+            <button class="btn buttonm-background buttonm-font-color buttonm" type="button" onclick="loginuser()">
+                Entrar
+            </button>
+        </div>
+        <script src="js/URI.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <script src="js/login.js"></script>
+    </body>
+</html>

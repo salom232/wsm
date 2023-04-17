@@ -1,0 +1,18 @@
+#service: frontend-dev #version 25052021-01
+#service: frontend-test #version 25052021-01
+service: default #version 25052021-01
+runtime: python27
+api_version: 1
+threadsafe: true
+
+manual_scaling:
+  instances: 1
+
+handlers:
+- url: /
+  static_files: site/index.html
+  upload: site/index.html
+
+- url: /(.*)
+  static_files: site/\1
+  upload: site/(.*)

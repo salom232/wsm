@@ -1,0 +1,1158 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="theme-color" content="#7952b3">
+        <title>Consulta/Edición de artículos</title>
+
+        <!-- CSS Files -->
+        <link href="css/brands.css" rel="stylesheet">
+        <link href="css/solid.css" rel="stylesheet">
+        <link href="css/fontawesome.css" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">        
+        <link href="css/animate.min.css" rel="stylesheet">
+        <link href="css/offcanvas.css" rel="stylesheet">
+        <link href="css/select2.min.css" rel="stylesheet">
+        <link href="css/select2-bootstrap4.css" rel="stylesheet">
+        <link href="css/dataTables.bootstrap5.min.css" rel="stylesheet">
+        <link href="css/jquery-ui.css" rel="stylesheet">
+        <!-- CSS Files -->    
+        
+    </head>
+    <body class="bg-light">
+        <div class="overlay">
+            <div id="loading-img"></div>
+        </div>
+        <nav class="navbar navbar-expand-lg fixed-top" aria-label="Main navigation" id ="uppernavbar">
+        <div class="container-fluid">
+            <h2 class="h2 mb-0 text-black lh-2 fontgandhi">Catálogo Gandhi</h2>
+            <img class="me-3" src="media/logo.png" alt="" width="224" height="92.4">
+        </div>
+        </nav>
+
+        <div class="nav-scroller shadow-sm" id="subnav">
+            <div id="wrappersub">
+                <div id="first">&nbsp;&nbsp;&nbsp;&nbsp;Bienvenido:&nbsp;<b><label id="UserNameRol"></label></b></div>
+                <div id="second">Rol:&nbsp;<label id="UserRol"></label>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            </div>
+        </div>
+        <div id="wrapper">
+            <div class="overlay"></div>
+            
+            <!-- Sidebar Menu -->
+            <nav class="navbar navbar-inverse fixed-top" id="sidebar-wrapper" role="navigation">
+                <ul class="nav sidebar-nav" id="NavBarMenu">
+                    <div class="sidebar-header">
+                        <div class="sidebar-brand">
+                            <a href="#">Menú</a>
+                        </div>
+                    </div>
+                </ul>
+            </nav>
+
+            <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+                <span class="hamb-top"></span>
+                <span class="hamb-middle"></span>
+                <span class="hamb-bottom"></span>
+            </button>
+            <!-- Sidebar Menu -->
+
+            <!-- Content area (for work) -->
+            <main class="container">
+                <!-- Option Title -->
+                <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+                    <div class="lh-1">
+                        <h1 class="h6 mb-0 text-white lh-1">Sección de consulta/Edición de artículos</h1>
+                        <h1 class="h6 mb-0 text-white lh-1">Consulta/Edición</h1>
+                    </div>
+                </div>
+                <!-- Option Title -->
+
+                <!-- Option Work Area -->
+                <div class="my-3 p-3 bg-white rounded shadow-sm">
+                    <h6 class="border-bottom pb-2 mb-0">Consulta/Edición de artículos</h6>
+                    <br>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-auto">
+                            <h6 class="pb-2 mb-0">Tipo de artículos:</h6>
+                        </div>
+                        <div class="col-auto">
+                            <select data-live-search="true" class="form-select form-select-sm" aria-label=".form-select-sm example" id="ItemType" onchange="funGetAttOptions()"></select>
+                        </div>
+                    </div><br>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        Búsqueda:&nbsp;
+                                    </span>
+                                </div>
+                                <select data-live-search="true" class="form-select" id="ItemTypeSearch">
+                                    <option value="searchsku"select>Código de Barras</option>
+                                    <option value="searchname">Título</option>
+                                    <option value="searchauthor">Autor</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="SKUFS">
+                        </div>
+                        <div class="col-sm-1">
+                            <button class="btn buttonm-background buttonm-font-color buttonm" type="button" onclick="getItemByIdAndType()">
+                                Consultar
+                            </button>
+                        </div>
+                    </div>
+                    <center>
+                        <br>
+                        <div class="MainBodySearch" style="display:none">
+                            <table id="SearchDataResult" class="table table-striped table-bordered" cellspacing="0" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th align="center">SKU</th>
+                                        <th align="center">ISBN</th>
+                                        <th align="center">EAN</th>
+                                        <th align="center">Título</th>
+                                        <th align="center">Autor</th>
+                                        <th align="center">Consultar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="TSearchDataResult"></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th align="center">SKU</th>
+                                        <th align="center">ISBN</th>
+                                        <th align="center">EAN</th>
+                                        <th align="center">Título</th>
+                                        <th align="center">Autor</th>
+                                        <th align="center">Consultar</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </center>
+                    <center>
+                        <div class="MainBodyContent" style="display:none;width: 100%;">
+                            <table>
+                                <tr>
+                                    <td align="right" style="width: 50%;"><canvas id="coverbook"></canvas></td>
+                                    <td align="right" style="width: 2%;">&nbsp;</td>
+                                    <td style="width: 50%; vertical-align: top;">
+                                        <h2><label id="CoverTitle" style="color: black;"></label></h2><br>
+                                        <h5 class="h5 mb-0 lh-1">SKU:&nbsp;<label id="CoverSKU" style="color: black;"></label></h3><br>
+                                        <h5 class="h5 mb-0 lh-1">ISBN:&nbsp;<label id="CoverISBN" style="color: black;"></label></h3><br>
+                                        <h5 class="h5 mb-0 lh-1">Precio de venta:&nbsp;<label id="CoverPrice" style="color: black;"></label>&nbsp;<label id="CoverCurrency" style="color: black;"></label></h3><br>
+                                    </td>
+                                </tr>
+                            </table><br>
+                            <center>
+                                <div class="row" style="width: 100%;">
+                                    <div class="card card-body">
+                                        <div class="row">
+                                            <div class="d-grid gap-2 d-md-flex divmenu">
+                                                <button class="btn OPGEN buttonm-background buttonm-font-color buttonm buttonmfocus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseaddgen" aria-expanded="false" aria-controls="collapseExample" style="display:none;">
+                                                    Generales
+                                                </button>
+                                                <button class="btn OPEDIC buttonm-background buttonm-font-color buttonm buttonmfocus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseaddedit" aria-expanded="false" aria-controls="collapseExample" style="display:none;">
+                                                    D. Edición
+                                                </button>
+                                                <button class="btn OPCHAR buttonm-background buttonm-font-color buttonm buttonmfocus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseaddchar" aria-expanded="false" aria-controls="collapseExample" style="display:none;">
+                                                    Características
+                                                </button>
+                                                <button class="btn OPPRCLA buttonm-background buttonm-font-color buttonm buttonmfocus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseaddprov" aria-expanded="false" aria-controls="collapseExample" style="display:none;">
+                                                    Proveedor y clasificación
+                                                </button>
+                                                <button class="btn OPCOIMP buttonm-background buttonm-font-color buttonm buttonmfocus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseaddcost" aria-expanded="false" aria-controls="collapseExample" style="display:none;">
+                                                    Costos e impuestos
+                                                </button>
+                                                <button class="btn OPDES buttonm-background buttonm-font-color buttonm buttonmfocus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseaddest" aria-expanded="false" aria-controls="collapseExample" style="display:none;">
+                                                    Destinos
+                                                </button>
+                                                <button class="btn OPOTH buttonm-background buttonm-font-color buttonm buttonmfocus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseaddoth" aria-expanded="false" aria-controls="collapseExample" style="display:none;">
+                                                    Otros
+                                                </button>
+                                                <button class="btn OPSINP buttonm-background buttonm-font-color buttonm buttonmfocus" type="button" data-bs-toggle="collapse" data-bs-target="#collapseaddsinop" aria-expanded="false" aria-controls="collapseExample" style="display:none;">
+                                                    Sinopsis
+                                                </button>
+                                                <button class="btn OPUPDS buttonm-background buttonm-font-color buttonm buttonmfocus" type="button" data-bs-toggle="modal" data-bs-target="#UpdateModal" style="display:none;">
+                                                    Actualizar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><br>
+                            </center>
+                            <div class="collapse" id="collapseaddgen">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6" id='skua' style="display:none">
+                                            <div class="input-group select2-bootstrap-append">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Código de Barras:&nbsp;<label id='skul' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return isNumberKey(event)" class="form-control" id="sku" maxlength="13">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='ISBNa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        ISBN:&nbsp;<label id='ISBNl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return isNumberKey(event)" class="form-control" id="ISBN">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='EANa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        EAN:&nbsp;<label id='EANl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return isNumberKey(event)" class="form-control" id="EAN">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-12" id='namea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Título:&nbsp;<label id='namel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-12" id='subtitlea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Subtitulo:&nbsp;<label id='subtitlel' style="display:none"><font color="red">*</font>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="subtitle">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='author_namea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Nombre Autor:&nbsp;<label id='author_namel' style="display:none"><font color="red">*</font>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="author_name">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='' style="display:none">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='author_lastnamea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Apellido Paterno:&nbsp;<label id='author_lastnamel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="author_lastname">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='author_lastnamema' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Apellido Materno:&nbsp;<label id='author_lastnameml' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="author_lastnamem">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn OPUPDS buttonm-background buttonm-font-color buttonm" type="button" onclick="funenableatts('collapseaddgen')" id="enable-collapseaddgen" style="display:none">
+                                    Editar
+                                </button>
+                            </div>
+                            <div class="collapse" id="collapseaddedit">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6" id='publishera' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Editorial:&nbsp;<label id='publisherl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" id="publisher" class="form-control" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Collectiona' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Colección:&nbsp;<label id='Collectionl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Collection">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Editiona' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Número de Edición:&nbsp;<label id='Editionl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="Edition"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Yeara' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Año de Edición:&nbsp;<label id='Yearl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return isNumberKey(event)" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Year" maxlength="4">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='EditionTypea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Tipo de Edición:&nbsp;<label id='EditionTypel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="EditionType"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Countrya' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        País de Edición:&nbsp;<label id='Countryl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="Country"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn OPUPDS buttonm-background buttonm-font-color buttonm" type="button" onclick="funenableatts('collapseaddedit')" id="enable-collapseaddedit" style="display:none">
+                                    Editar
+                                </button>
+                            </div>
+                            <div class="collapse" id="collapseaddchar">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6" id='Formatsa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Formato:&nbsp;<label id='Formatsl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="Formats"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Languagea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Idioma:&nbsp;<label id='Languagel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="Language"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Weighta' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Peso [grms]:&nbsp;<label id='Weightl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Weight">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2" id='Heighta' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Alto:&nbsp;<label id='Heightl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);" style="width: 1.5cm;" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Height">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2" id='Widtha' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Grueso:&nbsp;<label id='Widthl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);" style="width: 1.5cm;" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Width">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2" id='Lenghta' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Ancho:&nbsp;<label id='Lenghtl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);" style="width: 1.5cm;" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Lenght">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Pagesa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Páginas:&nbsp;<label id='Pagesl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="number" onkeypress="return isNumberKey(event)" onpaste="return false" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Pages">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Stocka' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Disponibilidad:&nbsp;<label id='Stockl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="Stock"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='publication_datea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Fecha de publicación:&nbsp;<label id='publication_datel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" class="form-control datepicker" placeholder="YYYY-MM-DD" aria-label="Username" aria-describedby="basic-addon1" id="publication_date">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Stocka' style="display:none">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn OPUPDS buttonm-background buttonm-font-color buttonm" type="button" onclick="funenableatts('collapseaddchar')" id="enable-collapseaddchar" style="display:none">
+                                    Editar
+                                </button>
+                            </div>
+                            <div class="collapse" id="collapseaddprov">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6" id='suppliera' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Proveedor:&nbsp;<label id='supplierl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select data-live-search="true" class="form-select select2-plug" id="supplier"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='categoriesa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Categorías:&nbsp;<font color="red">*</font>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="categories"></select>
+                                                <button class="btn buttonm-background buttonm-font-color buttonm" type="button" onclick="AddNewCategorie()" id="categoriesB">
+                                                    Agregar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6">
+                                    
+                                        </div>
+                                        <div class="col-sm-6" id='supplierIDa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        ProveedorID:&nbsp;
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="supplierID" disabled></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='CategoriesTBa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Categorías Agregadas
+                                                    </span>
+                                                </div>
+                                                <table id="CategoriesTB" class="table" cellspacing="0" style="width:100%;">
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th scope="col" align="center">ID</th>
+                                                            <th scope="col" align="center">Label</th>
+                                                            <th scope="col" align="center">Eliminar</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="TCategoriesTB"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="row top-buffer">
+                                            <div class="col-sm-6" id='bisaca' style="display:none">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            Bisac:&nbsp;<label id='bisacl' style="display:none"><font color="red">*</font></label>
+                                                        </span>                    
+                                                    </div>
+                                                    <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="bisac">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6" id='categoriesa' style="display:none">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn OPUPDS buttonm-background buttonm-font-color buttonm" type="button" onclick="funenableatts('collapseaddprov')" id="enable-collapseaddprov" style="display:none">
+                                    Editar
+                                </button>
+                            </div>
+                            <div class="collapse" id="collapseaddcost">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6" id='currencya' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Moneda:&nbsp;<label id='currencyl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="currency"></select>
+                                                <input type="text" style="display:none" class="form-control" id="currencyOrig">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Pricea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Precio Lista:&nbsp;<label id='Pricel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);" onpaste="return false" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Price">
+                                                <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="PriceOrig" style="display:none">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Destinya' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Destino:&nbsp;<font color="red">*</font>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="Destiny"></select>
+                                                <button class="btn buttonm-background buttonm-font-color buttonm" type="button" onclick="AddNewDestiny()" id="DestinyB">
+                                                    Agregar
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Taxa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        I.V.A.:&nbsp;<label id='Taxl' style="display:none"></label>
+                                                    </span>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="N" name="Tax" id="Tax">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='DestinyTBa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Destinos Agregados
+                                                    </span>                    
+                                                </div>
+                                                <table id="DestinyTB" class="table" cellspacing="0" style="width:100%;">
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th scope="col" align="center">ID</th>
+                                                            <th scope="col" align="center">Label</th>
+                                                            <th scope="col" align="center">Eliminar</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="TDestinyTB"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='' style="display:none">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Discounta' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Descuento de compra:&nbsp;<label id='Discountl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);" onpaste="return false" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Discount">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='single_price_lawa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Ley de Precio Único:&nbsp;<label id='single_price_lawl' style="display:none"></label>
+                                                    </span>                    
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="N" name="single_price_law" id="single_price_law">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='SATa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Clave SAT:&nbsp;<label id='SATl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="SAT"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='ColofonDatea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Fecha de Colofón:&nbsp;<label id='ColofonDatel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="ColofonDate" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn OPUPDS buttonm-background buttonm-font-color buttonm" type="button" onclick="funenableatts('collapseaddcost')" id="enable-collapseaddcost" style="display:none">
+                                    Editar
+                                </button>
+                            </div>
+                            <div class="collapse" id="collapseaddest">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12" id='chanles' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Canales de venta:&nbsp;<label id='supplierl' style="display:none"><font color="red">*</font></label>
+                                                    </span>
+                                                </div>
+                                                <br>
+                                                <div class="input-group" id="chanelmenu"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn OPUPDS buttonm-background buttonm-font-color buttonm" type="button" onclick="funenableatts('collapseaddest')" id="enable-collapseaddest" style="display:none">
+                                    Editar
+                                </button>
+                            </div>
+                            <div class="collapse" id="collapseaddoth">
+                                <div class="card card-body">
+                                    <div class="row">
+                                        <div class="col-sm-6" id='urla' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Web:&nbsp;<label id='urll' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="url">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Seriea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Serie:&nbsp;<label id='Seriel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Serie" maxlength="4">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Run_timea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Duración:&nbsp;<label id='Run_timel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);" onpaste="return false" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Run_time">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='buy_beta' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Apuesta de Compra:&nbsp;<label id='buy_betl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="buy_bet"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Active_IDa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Active ID:&nbsp;<label id='Active_IDl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Active ID" aria-describedby="basic-addon1" id="Active_ID">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Translatora' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Traductor:&nbsp;<label id='Translatorl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Active ID" aria-describedby="basic-addon1" id="Translator">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='narratora' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Narrador:&nbsp;<label id='narratorl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="narrator">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='abridgeda' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Resumido:&nbsp;<label id='abridgedl' style="display:none"></label>
+                                                    </span>                    
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="abridged" value="Y" id="abridged">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Agesa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Edades:&nbsp;<label id='Agesl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="number" onkeypress="return isNumberKey(event)" onpaste="return false" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Ages">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Branda' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Marca:&nbsp;<label id='Brandl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" id="Brand" class="form-control" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Manufacturera' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Fabricante:&nbsp;<label id='Manufacturerl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" id="Manufacturer" class="form-control" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='directora' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Nombre Director:&nbsp;<label id='directorl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="director">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Apellido_Directora' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Apellido Director:&nbsp;<label id='Apellido_Directorl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Apellido_Director">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Packagea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Tipo de empaque:&nbsp;<label id='Packagel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Package">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Ratinga' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Clasificación:&nbsp;<label id='Ratingl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <select class="form-select select2-plug" id="Rating"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='artista' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Nombre Artista:&nbsp;<label id='artistl' style="display:none"><font color="red">*</font></label>
+                                                    </span>
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="artist">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='apellido_artistaa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Apellido Artista:&nbsp;<label id='apellido_artistal' style="display:none"><font color="red">*</font></label>
+                                                    </span>
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="apellido_artista">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Batteriesa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Duración de las baterías:&nbsp;<label id='Batteriesl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return isNumberKey(event)" onpaste="return false" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Batteries">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Bluetootha' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Bluetooth:&nbsp;<label id='Bluetoothl' style="display:none"></label>
+                                                    </span>                    
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="Y" name="Bluetooth" id="Bluetooth">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Materiala' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Material:&nbsp;<label id='Materiall' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Material">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Storagea' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Almacenamiento:&nbsp;<label id='Storagel' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);" onpaste="return false" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Storage">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='Warrantya' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Garantía:&nbsp;<label id='Warrantyl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="text" onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="Warranty">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='Waterproofa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Contra el agua:&nbsp;<label id='Waterproofl' style="display:none"></label>
+                                                    </span>                    
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="Y" name="Waterproof" id="Waterproof">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-6" id='nb_piecesa' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Número de piezas:&nbsp;<label id='nb_piecesl' style="display:none"><font color="red">*</font></label>
+                                                    </span>                    
+                                                </div>
+                                                <input type="number" onkeypress="return isNumberKey(event)" onpaste="return false" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="nb_pieces">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id='wifia' style="display:none">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Conectividad WiFi:&nbsp;<label id='wifil' style="display:none"></label>
+                                                    </span>                    
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="Y" name="wifi" id="wifi">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-12" id='Customer_supporta' style="display:none">
+                                            <font color="black"><b>Atención a clientes:</b>&nbsp;<label id='Customer_supportl' style="display:none"><font color="red">*</font></label></font><br>
+                                            <textarea onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="Customer_support" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-12" id='in_the_boxa' style="display:none">
+                                            <font color="black"><b>Que hay en la caja:</b>&nbsp;<label id='in_the_boxl' style="display:none"><font color="red">*</font></label></font><br>
+                                            <textarea onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="in_the_box" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-12" id='Additional_featuresa' style="display:none">
+                                            <font color="black"><b>Especificaciones adicionales:</b>&nbsp;<label id='Additional_featuresl' style="display:none"><font color="red">*</font></label></font><br>
+                                            <textarea onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="Additional_features" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-12" id='Extrasa' style="display:none">
+                                            <font color="black"><b>Contenido Extra:</b>&nbsp;<label id='Extrasl' style="display:none"><font color="red">*</font></label></font><br>
+                                            <textarea onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="Extras" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-12" id='ImageBtt' style="display:none">
+                                            <font color="black"><b>El formato de la imagen permitido es JPG, las medidas mínimas son 690px x 840px y la máxima es de 800px x 1200px, peso máximo de la imagen es 1 mb.</b>&nbsp;</font><br>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        Portada&nbsp;<label id='imagel' style="display:none"></label>
+                                                    </span>
+                                                </div>
+                                                <label class="form-label" for="customFile"></label>
+                                                <input type="file" class="form-control" id="image" onchange="previewFile()" accept="image/jpeg"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-12" id='imagea' style="display:none">
+                                            <img src="" id="coverimg">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn OPUPDS buttonm-background buttonm-font-color buttonm" type="button" onclick="funenableatts('collapseaddoth')" id="enable-collapseaddoth" style="display:none">
+                                    Editar
+                                </button>
+                            </div>
+                            <div class="collapse" id="collapseaddsinop">
+                                <div class="card card-body">
+                                    <div class="row top-buffer">
+                                        <div class="col-sm-12" id='descriptiona' style="display:none">
+                                            <font color="purple"><b>Importante:&nbsp;</b><label id='descriptionl' style="display:none"><font color="red">*</font></label>&nbsp; Capture la sinópsis en altas y bajas y con los signos de puntuación habituales. Evite caracteres especiales como &,<<,>>,£,¬, etc</font>
+                                            <br>
+                                            <textarea onkeyup="this.value=this.value.replace(/[^a-zA-ZÁ-ÿ0-9\s,.:;-_()/u00f1/u00d1/]$/g,'');" class="form-control" id="description" rows="3" cols="50"></textarea>
+                                        </div>
+                                    </div>                          
+                                </div>
+                                <button class="btn OPUPDS buttonm-background buttonm-font-color buttonm" type="button" onclick="funenableatts('collapseaddsinop')" id="enable-collapseaddsinop" style="display:none">
+                                    Editar
+                                </button>
+                            </div>
+                            <div class="d-flex text-muted pt-3">
+                                <font color="red">*</font>&nbsp;Los campos marcados son obligatorios.
+                            </div>
+                        </div>
+                    </center>
+                </div>
+            </main>
+            <!-- Content area (for work) -->
+        </div>
+
+        <!-- Message Modal -->
+        <div class="modal fade" id="MessageModal" tabindex="-1" aria-labelledby="MessageModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="ModalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label id="ModalBody"></label>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar Modal -->
+        <div class="modal fade" id="pleaseWaitDialog" tabindex="-1" data-backdrop="static" data-keyboard="false" aria-labelledby="pleaseWaitDialogLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title">Please wait...</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" 
+                        aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Update Modal -->
+        <div class="modal fade" id="UpdateModal" tabindex="-1" aria-labelledby="UpdateModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="ModalTitle">Modificación de datos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label id="ModalBody">Esta a punto de actualizar los datos, ¿desea continuar?</label>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="funUploadAkeneo()" id="updateData">Continuar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <span>Año © 2021 | Librerías Gandhi S.A. de C.V.</span>
+        </footer>
+        <!-- JS Files -->
+        <script src="js/URI.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <script src="js/offcanvas.js"></script>
+        <script src="js/hiddenbar.js"></script>
+        <script src="js/validations.js"></script>
+        <script src="js/consulta.js"></script>
+        <script src="js/select2.min.js"></script>
+        <script src="js/bootstrap-datepicker.min.js"></script>
+        <script src="js/jquery.inputmask.js"></script>
+        <script src="js/axios.min.js"></script>
+        <script src="js/jquery.dataTables.min.js"></script>
+        <script src="js/dataTables.bootstrap5.min.js"></script>
+        <script src="js/dataTables.fixedColumns.min.js"></script>
+        <script src="js/jquery-ui.js"></script>
+        <script src="js/nicEdit.js"></script>
+        <script type="text/javascript">
+            bkLib.onDomLoaded(function() {
+                new nicEditor({maxHeight : 100}).panelInstance('description');
+                $('.nicEdit-panelContain').parent().width('100%');
+                $('.nicEdit-panelContain').parent().height('20%');
+                $('.nicEdit-panelContain').parent().next().width('98%');
+                $('.nicEdit-panelContain').parent().next().height('45%');
+                $('.nicEdit-main').width('98%');
+                $('.nicEdit-main').height('98%');
+                nicEditors.findEditor("description").disable();
+            });
+        </script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DST9YFQJZ9"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-DST9YFQJZ9');
+        </script>
+        <!-- JS Files -->
+    </body>
+</html>

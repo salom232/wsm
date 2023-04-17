@@ -1,0 +1,24 @@
+<html>
+    <body>
+        <button class="btn btn-primary" type="button" onclick="getCanvas()">
+            Guardar
+        </button>
+        <table>
+            <tr>
+                <td style="width: 100%;" colspan="2">
+                    <div class="input-group mb-3">
+                        <label class="form-label" for="customFile"></label>
+                        <input type="file" class="form-control" id="coverFile" onchange="previewFile()"/>                                            
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 100%;" colspan="2">
+                    <img src="" alt="Image preview..." id="coverimg">
+                </td>
+            </tr>
+        </table>
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <script src="js/test.js"></script>
+    </body>
+</html>
